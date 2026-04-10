@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+data/meal_history.db
+data/sensitivity_factors.json
+data/stores.json

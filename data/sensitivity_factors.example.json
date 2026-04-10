@@ -1,0 +1,23 @@
+[
+  {
+    "ingredient": "peanut",
+    "factor": 5.0,
+    "variants": ["peanuts", "peanut butter", "peanut oil", "groundnut"]
+  },
+  {
+    "ingredient": "shellfish",
+    "factor": 4.5,
+    "variants": ["shrimp", "crab", "lobster", "scallops", "clams", "oysters", "mussels"]
+  },
+  {
+    "ingredient": "dairy",
+    "factor": 3.0,
+    "variants": ["milk", "cream", "butter", "cheese", "yogurt", "whey", "lactose"]
+  },
+  {
+    "ingredient": "olive oil",
+    "factor": 2.3,
+    "variants": ["extra virgin olive oil", "evoo", "olive oil (finishing)", "finishing olive oil"],
+    "note": "flag only for finishing/extra virgin usage; bare 'olive oil' as cooking fat default does not flag"
+  }
+]

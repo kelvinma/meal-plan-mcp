@@ -1,0 +1,26 @@
+[
+  {
+    "key": "whole_foods",
+    "name": "Whole Foods",
+    "weekly_ad_url": "https://www.wholefoodsmarket.com/stores/your-city",
+    "notes": "Store-specific page; sales section may be in embedded JSON rather than visible HTML."
+  },
+  {
+    "key": "farmers_market",
+    "name": "Local Farmers Market",
+    "weekly_ad_url": "https://your-local-farm-network.org",
+    "notes": "Fetch the weekly or seasonal report page. Supplement with USDA terminal market PDFs at https://ams.usda.gov/mnreports/"
+  },
+  {
+    "key": "fresh_market",
+    "name": "The Fresh Market",
+    "weekly_ad_url": "https://www.myweeklyads.net/fresh-market",
+    "notes": "Use myweeklyads.net as the fallback; thefreshmarket.com requires store selection that doesn't work in a plain fetch."
+  },
+  {
+    "key": "earth_fare",
+    "name": "Earth Fare",
+    "weekly_ad_url": "https://www.earthfare.com/weekly-ad/",
+    "notes": "Fetch the landing page first to extract the dynamic PDF URL — do not guess the PDF filename directly."
+  }
+]
