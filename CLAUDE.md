@@ -144,20 +144,15 @@ uv run server.py
 
 ### Register with Claude Code
 
-Add to `~/.claude/claude_desktop_config.json`:
+Add to `~/.claude/settings.json`. Point directly to the venv's Python — Claude Code spawns MCP servers without your shell environment, so `uv run` and version manager shims will fail:
 
 ```json
 {
   "mcpServers": {
     "meal_planning": {
-      "command": "uv",
-      "args": ["run", "/path/to/meal-planning-mcp/server.py"],
-      "env": {
-        "WEATHER_API_KEY": "your_key_here",
-        "LOCATION_LAT": "40.7128",
-        "LOCATION_LON": "-74.0060",
-        "LOCATION_CITY": "New York, NY"
-      }
+      "command": "/path/to/meal-plan-mcp/.venv/bin/python",
+      "args": ["server.py"],
+      "cwd": "/path/to/meal-plan-mcp"
     }
   }
 }
@@ -493,7 +488,7 @@ This phase alone solves variety and deterministic screening. Ship it before touc
 pytest tests/ -v
 
 # Inspect tools interactively
-npx @modelcontextprotocol/inspector uv run server.py
+npx @modelcontextprotocol/inspector .venv/bin/python server.py
 
 # Verify server starts cleanly
 python server.py --help

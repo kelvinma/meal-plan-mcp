@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Annotated
 
 from dotenv import load_dotenv
-from mcp.server.fastmcp import FastMCP
+from mcp.server.fastmcp import Context, FastMCP
 from pydantic import BaseModel, Field, field_validator
 
 from tools.ads import get_weekly_ads
@@ -18,9 +18,8 @@ from tools.screener import load_sensitivity_factors, validate_ingredients
 from tools.seasonal import get_seasonal_report
 from tools.weather import get_weather
 
-load_dotenv()
-
-_BASE_DIR = Path(__file__).parent
+_BASE_DIR = Path(__file__).resolve().parent
+load_dotenv(_BASE_DIR / ".env")
 _SENSITIVITY_PATH = os.getenv(
     "SENSITIVITY_PATH", str(_BASE_DIR / "data" / "sensitivity_factors.json")
 )
@@ -103,7 +102,7 @@ class ValidationInput(BaseModel):
 
 @mcp.tool()
 async def meal_planning_get_meal_history(
-    ctx,
+    ctx: Context,
     n_days: Annotated[int, Field(default=14, ge=1, le=60)] = 14,
 ) -> dict:
     """Return recent meal history to enforce variety. Includes pre-aggregated protein and carb counts."""
@@ -115,7 +114,7 @@ async def meal_planning_get_meal_history(
 
 
 @mcp.tool()
-async def meal_planning_save_meal_plan(ctx, plan: MealPlanInput) -> dict:
+async def meal_planning_save_meal_plan(ctx: Context, plan: MealPlanInput) -> dict:
     """Persist the accepted meal plan. Upserts on (date, dish_name)."""
     db = ctx.request_context.lifespan_context["db"]
     try:
@@ -127,7 +126,7 @@ async def meal_planning_save_meal_plan(ctx, plan: MealPlanInput) -> dict:
 
 @mcp.tool()
 async def meal_planning_validate_ingredients(
-    ctx, validation: ValidationInput
+    ctx: Context, validation: ValidationInput
 ) -> list[dict]:
     """
     Deterministic sensitivity screening. Returns per-dish status, flags, and display_label.
@@ -142,7 +141,7 @@ async def meal_planning_validate_ingredients(
 
 
 @mcp.tool()
-async def meal_planning_get_weekly_ads(ctx, store: str) -> list[dict] | dict:
+async def meal_planning_get_weekly_ads(ctx: Context, store: str) -> list[dict] | dict:
     """
     Fetch current sale items for a configured grocery store.
     Call for all stores in parallel at session start.
@@ -156,7 +155,7 @@ async def meal_planning_get_weekly_ads(ctx, store: str) -> list[dict] | dict:
 
 
 @mcp.tool()
-async def meal_planning_get_seasonal_report(ctx) -> dict:
+async def meal_planning_get_seasonal_report(ctx: Context) -> dict:
     """
     Return what produce is currently at peak in your area.
     Combines local farmers market data and USDA terminal market reports.
@@ -169,7 +168,7 @@ async def meal_planning_get_seasonal_report(ctx) -> dict:
 
 
 @mcp.tool()
-async def meal_planning_get_weather(ctx, dates: list[str]) -> list[dict]:
+async def meal_planning_get_weather(ctx: Context, dates: list[str]) -> list[dict]:
     """
     Return daily forecasts for the given ISO dates.
     Each entry includes condition, high_f, low_f, precip_chance, and grill_viable.
