@@ -31,6 +31,9 @@ Claude Code calls the read tools in parallel at the start of each session, then 
 meal-planning-mcp/
 ├── CLAUDE.md                   # this file
 ├── server.py                   # MCP server entry point
+├── .claude/
+│   └── commands/
+│       └── meal-plan.md        # /meal-plan slash command (the orchestrator)
 ├── tools/
 │   ├── __init__.py
 │   ├── ads.py                  # store flyer fetchers
@@ -441,15 +444,16 @@ This server does not contain planning logic. The Claude Code orchestrator is res
 - Enforcing carb, protein, and fiber planning rules
 - Assembling the final plan output
 
-The MCP server provides clean inputs so the orchestrator can reason without fetching. The orchestrator should:
+The orchestrator is the `/meal-plan` Claude Code slash command (`.claude/commands/meal-plan.md`).
+Claude Code itself runs the planning logic — no separate Python script or API key is needed.
+The slash command drives the session in six steps:
 
-1. Call `get_weekly_ads` for all configured stores in parallel at session start
-2. Call `get_seasonal_report` and `get_meal_history` in the same parallel batch
-3. Call `get_weather` for the planning window dates
-4. Run planning logic with all structured inputs in context
-5. Call `validate_ingredients` on the proposed dish list
-6. Apply `display_label` values from screener output verbatim in final output
-7. Call `save_meal_plan` with the accepted plan before ending the session
+1. Read `data/stores.json` to discover configured grocery store keys
+2. Call `get_weekly_ads` (per store), `get_seasonal_report`, `get_meal_history`, and `get_weather` in parallel
+3. Plan the week against the sensitivity table and planning rules
+4. Call `validate_ingredients` on all home-cook dishes
+5. Present the plan using `display_label` values verbatim
+6. On confirmation, call `save_meal_plan` with the accepted plan
 
 ---
 
@@ -470,10 +474,15 @@ This phase alone solves variety and deterministic screening. Ship it before touc
 - [x] `tools/seasonal.py` — local farmers market + USDA
 - [x] `tools/weather.py` — OpenWeatherMap
 
-### Phase 3 — Orchestrator Claude Code script
+### Phase 3 — Orchestrator slash command
 
-- [ ] `orchestrator.py` — Claude Code script that dispatches tools in parallel and runs the planning pass
-- [ ] Replace Project Instructions with a lean prompt that references tool outputs by name
+- [x] `.claude/commands/meal-plan.md` — `/meal-plan` slash command; Claude Code itself is the orchestrator
+  - Step 1: reads `data/stores.json` to discover configured store keys
+  - Step 2: calls all data-fetching tools in parallel (ads × n stores, seasonal, history, weather)
+  - Step 3: plans the week against the sensitivity table and planning rules
+  - Step 4: calls `validate_ingredients` on all home-cook dishes
+  - Step 5: presents the plan using `display_label` values verbatim
+  - Step 6: asks to confirm, then calls `save_meal_plan`
 
 ---
 
