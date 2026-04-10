@@ -1,4 +1,4 @@
-"""Meal Planning MCP Server — Phase 1 (history + screener)."""
+"""Meal Planning MCP Server."""
 
 from __future__ import annotations
 
@@ -12,8 +12,11 @@ from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
 from pydantic import BaseModel, Field, field_validator
 
+from tools.ads import get_weekly_ads
 from tools.history import get_meal_history, init_db, save_meal_plan
 from tools.screener import load_sensitivity_factors, validate_ingredients
+from tools.seasonal import get_seasonal_report
+from tools.weather import get_weather
 
 load_dotenv()
 
@@ -136,6 +139,45 @@ async def meal_planning_validate_ingredients(
         return validate_ingredients(dishes, sensitivity_table)
     except Exception as e:
         return [{"error": str(e)}]
+
+
+@mcp.tool()
+async def meal_planning_get_weekly_ads(ctx, store: str) -> list[dict] | dict:
+    """
+    Fetch current sale items for a configured grocery store.
+    Call for all stores in parallel at session start.
+    Returns a list of SaleItem dicts, or an error dict with an 'error' key on failure.
+    """
+    stores = ctx.request_context.lifespan_context["stores"]
+    try:
+        return await get_weekly_ads(store, stores)
+    except Exception as e:
+        return {"source": store, "error": str(e), "items": []}
+
+
+@mcp.tool()
+async def meal_planning_get_seasonal_report(ctx) -> dict:
+    """
+    Return what produce is currently at peak in your area.
+    Combines local farmers market data and USDA terminal market reports.
+    """
+    stores = ctx.request_context.lifespan_context["stores"]
+    try:
+        return await get_seasonal_report(stores)
+    except Exception as e:
+        return {"error": str(e), "highlights": [], "chef_picks": ""}
+
+
+@mcp.tool()
+async def meal_planning_get_weather(ctx, dates: list[str]) -> list[dict]:
+    """
+    Return daily forecasts for the given ISO dates.
+    Each entry includes condition, high_f, low_f, precip_chance, and grill_viable.
+    """
+    try:
+        return await get_weather(dates)
+    except Exception as e:
+        return [{"date": d, "error": str(e), "grill_viable": False} for d in dates]
 
 
 # ---------------------------------------------------------------------------

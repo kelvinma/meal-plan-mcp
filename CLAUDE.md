@@ -460,15 +460,15 @@ The MCP server provides clean inputs so the orchestrator can reason without fetc
 - [x] `tools/history.py` — SQLite schema, `get_meal_history`, `save_meal_plan`
 - [x] `tools/screener.py` — `validate_ingredients` with sensitivity JSON table
 - [x] `server.py` — FastMCP server wired up with lifespan
-- [ ] Manual test via `npx @modelcontextprotocol/inspector`
+- [x] Manual test via `npx @modelcontextprotocol/inspector`
 
 This phase alone solves variety and deterministic screening. Ship it before touching scrapers.
 
 ### Phase 2 — Data fetchers
 
-- [ ] `tools/ads.py` — store fetchers driven by `data/stores.json`
-- [ ] `tools/seasonal.py` — local farmers market + USDA
-- [ ] `tools/weather.py` — OpenWeatherMap
+- [x] `tools/ads.py` — store fetchers driven by `data/stores.json`
+- [x] `tools/seasonal.py` — local farmers market + USDA
+- [x] `tools/weather.py` — OpenWeatherMap
 
 ### Phase 3 — Orchestrator Claude Code script
 
