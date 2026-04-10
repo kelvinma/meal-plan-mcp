@@ -33,7 +33,8 @@ meal-planning-mcp/
 ├── server.py                   # MCP server entry point
 ├── .claude/
 │   └── commands/
-│       └── meal-plan.md        # /meal-plan slash command (the orchestrator)
+│       ├── meal-plan.md         # /meal-plan slash command (gitignored — copy from example)
+│       └── meal-plan.example.md # template; copy to meal-plan.md and fill in your details
 ├── tools/
 │   ├── __init__.py
 │   ├── ads.py                  # store flyer fetchers

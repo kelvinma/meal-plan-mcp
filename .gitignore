@@ -5,3 +5,4 @@ __pycache__/
 data/meal_history.db
 data/sensitivity_factors.json
 data/stores.json
+.claude/commands/meal-plan.md
