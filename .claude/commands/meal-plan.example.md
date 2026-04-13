@@ -47,6 +47,14 @@ weather and sale/seasonal alignment guide the choice.
 **Cuisine variety**
 No more than 2 nights of the same cuisine style across the 7-night plan.
 
+**Leftover planning**
+Actively design for leftovers — do not treat them as a side effect. For each home-cook
+dish that yields more than one serving, note what the leftovers become (lunch the next
+day, a grain bowl base, folded into a soup, etc.). Prefer proteins and grains that
+repurpose well over dishes that must be eaten immediately. Buying a larger cut or batch
+is encouraged when the second use is clearly planned. Avoid buying specialty ingredients
+that will only be used once.
+
 **Sensitivity reference** — add your household's flagged ingredients here.
 Copy from `data/sensitivity_factors.json` for reference. Example format:
 
@@ -83,15 +91,18 @@ Input format:
 Display a clean table. Use `display_label` verbatim from the screener output for
 every dish name — do not substitute your own version.
 
-| Date | | Dish | Source |
-|---|---|---|---|
-| YYYY-MM-DD | home | display_label | cookbook / site |
-| YYYY-MM-DD | out | Restaurant name | — |
+| Date | | Dish | Leftovers → | Source |
+|---|---|---|---|---|
+| YYYY-MM-DD | home | display_label | lunch / grain bowl / etc. | cookbook / site |
+| YYYY-MM-DD | out | Restaurant name | — | — |
+
+Use `—` in the Leftovers column for restaurant nights or dishes with no planned second use.
 
 Then write a short paragraph (3–5 sentences) covering:
 - Which sale items and seasonal produce anchored the plan
 - Any notable sensitivity substitutions you made
 - Cuisine variety across the week
+- How leftover planning reduces waste or shopping this week
 
 ---
 
